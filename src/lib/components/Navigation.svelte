@@ -1,4 +1,5 @@
 <script>
+	import { createEventDispatcher } from 'svelte';
 	/**
 	 * @type {any}
 	 */
@@ -14,8 +15,13 @@
 		},
 	];
 
+const dispatch = createEventDispatcher();
+
 	const handleSignOut = () => {
-		console.log("Hello world")
+		user = undefined
+		dispatch('signout', {
+			signout: true
+		});
 	}
 </script>
 

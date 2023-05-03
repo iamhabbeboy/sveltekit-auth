@@ -1,16 +1,21 @@
 <script>
-	import Header from './Header.svelte';
 	import './styles.css';
     import Navigation from '$lib/components/Navigation.svelte';
-    import { user } from "../store/index";
+	import { goto } from '$app/navigation';
 
     export let data;
-
-    $: user.set(data.user);
+    
+	/**
+	 * @param {{ detail: { signout: any; }; }} event
+	 */
+	async function handleSignOut(event) {
+		const status = event.detail.signout;
+        await goto(`/?signout=${status}`);
+	}
 </script>
 
 <div class="app">
-	<Navigation user={data.user}/>
+	<Navigation user={data.user} on:signout={handleSignOut}/>
 
     <div class="container mx-auto mt-8 antialiased">
         <slot />

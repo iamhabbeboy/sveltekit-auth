@@ -1,6 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import { user } from '.';
-import { derived, get } from 'svelte/store';
+import { create, find } from '.';
 
 /**
  * @type {any[]}
@@ -8,33 +7,26 @@ import { derived, get } from 'svelte/store';
 let sessions = [];
 
 export const getUserByEmail = async (/** @type {string} */ email) => {
-	const users = get(user);
-	if(!users || !Array.isArray(users)) {
-		return Promise.resolve(null);
-	}
-	const existingUser = users.find((user) => user.email === email);
+	const existingUser = find({
+		email: email
+	});
 	if (!existingUser) return Promise.resolve(null);
 	return Promise.resolve(existingUser);
 };
 
 export const getUserById = async (/** @type {string} */ id) => {
-	const users = get(user);
-	if(!users || !Array.isArray(users)) {
-	  return Promise.resolve(null);
-	}
-	const existingUser = users.find((user) => user.id === id);
-	if (!users) return Promise.resolve(null);
+	const existingUser = find({ id: id });
+	if (!existingUser) return Promise.resolve(null);
 	return Promise.resolve(existingUser);
 };
 
-export const createSession = (email) => {
+export const createSession = (/** @type {string} */ email) => {
 	const session = {
 		id: uuidv4(),
-		email,
+		email
 	};
-	sessions.push(session);
-	user.set(sessions);
-	return Promise.resolve(session);
+	const response = create(session);
+	return Promise.resolve(response);
 };
 
 export const removeSession = (id) => {

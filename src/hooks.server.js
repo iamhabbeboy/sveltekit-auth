@@ -29,5 +29,10 @@ export const handle = async ({ event, resolve }) => {
 		}
 	}
 
+	const query = event.url.searchParams.get('signout');
+	if(Boolean(query) == true) {
+		await event.cookies.delete("session_id", { path: '/' });
+	}
+
 	return resolve(event);
 };

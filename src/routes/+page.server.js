@@ -26,9 +26,3 @@ export const actions = {
         throw redirect(303, "/protected")
 	}
 };
-
-export async function load({ event }) {
-    return { 
-        page: "signin"
-    };
-}
