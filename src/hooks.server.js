@@ -14,18 +14,19 @@ export const handle = async ({ event, resolve }) => {
 	if (!sessionId && !unProtectedRoutes.includes(event.url.pathname))
 		return redirect('/', 'No authenticated user.');
 
-	const user = await getUserById(sessionId);
-	const currentUser = user;
+	const userInfo = await getUserById(sessionId);
+	const currentUser = userInfo;
 
-	if (!unProtectedRoutes.includes(event.url.pathname)) {
-		return redirect('/', 'Not a valid user');
-	}
 	if (currentUser) {
 		event.locals.user = {
 			isAuthenticated: true,
 			email: currentUser.email,
 			id: currentUser.id
 		};
+	} else {
+		if (!unProtectedRoutes.includes(event.url.pathname)) {
+			return redirect('/', 'Not a valid user');
+		}
 	}
 
 	return resolve(event);

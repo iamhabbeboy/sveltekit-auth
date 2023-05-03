@@ -1,5 +1,5 @@
 import { fail, redirect } from '@sveltejs/kit';
-import { createSession, getUserByEmail } from '../store/db';
+import { getUserByEmail } from '../store/db';
 import { dev } from '$app/environment';
 
 export const actions = {
@@ -15,7 +15,7 @@ export const actions = {
         if(!user || user.password !== password) {
             return fail(400, { email, incorrect: true });
         }
-        // const { id } = await createSession(email);
+ 
 		cookies.set('session_id', user.id, {
 			path: '/',
 			httpOnly: true,
@@ -26,3 +26,9 @@ export const actions = {
         throw redirect(303, "/protected")
 	}
 };
+
+export async function load({ event }) {
+    return { 
+        page: "signin"
+    };
+}

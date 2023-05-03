@@ -1,4 +1,8 @@
 <script>
+	/**
+	 * @type {any}
+	 */
+	 export let user;
 	$: navigation = [
 		{
 			href: '/',
@@ -6,10 +10,13 @@
 		},
 		{
 			href: '/protected',
-			name: 'protected',
-			// name: `${$session.user ? '🔓' : '🔒'} Protected`,
+			name: `${user ? '🔓' : '🔒'} Protected`,
 		},
 	];
+
+	const handleSignOut = () => {
+		console.log("Hello world")
+	}
 </script>
 
 <header class="bg-indigo-600">
@@ -25,14 +32,14 @@
 				</div>
 			</div>
 			<div class="ml-10 space-x-4">
-				<!-- {#if $session.user}
+				{#if user}
 					<button
 						on:click={handleSignOut}
 						class="inline-block bg-indigo-500 py-2 px-4 border border-transparent rounded-md text-base font-medium text-white hover:bg-opacity-75"
 					>
 						Sign out
 					</button>
-				{:else} -->
+				{:else}
 					<a
 						href="/"
 						class="inline-block bg-indigo-500 py-2 px-4 border border-transparent rounded-md text-base font-medium text-white hover:bg-opacity-75"
@@ -45,7 +52,7 @@
 					>
 						Sign up
 					</a>
-				<!-- {/if} -->
+				{/if}
 			</div>
 		</div>
 	</nav>

@@ -1,6 +1,7 @@
 import { redirect } from '@sveltejs/kit';
 import { createSession } from '../../store/db';
 import { dev } from '$app/environment';
+import { user } from '../../store/index';
 
 export const actions = {
 	default: async ({ request, cookies }) => {
@@ -19,6 +20,6 @@ export const actions = {
 			secure: !dev,
 			maxAge: 60 * 60 * 24 * 7 // one week
 		});
-        throw redirect(303, "/protected")
+		throw redirect(303, '/protected');
 	}
 };

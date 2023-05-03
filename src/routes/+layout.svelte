@@ -10,7 +10,7 @@
 </script>
 
 <div class="app">
-	<Navigation />
+	<Navigation user={data.user}/>
 
     <div class="container mx-auto mt-8 antialiased">
         <slot />

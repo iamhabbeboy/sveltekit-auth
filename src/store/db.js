@@ -1,11 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
-const users = [
-  {
-	id: "123",
-    email: "test@example.com",
-    password: "secret",
-  },
-];
+import { user } from '.';
+import { derived, get } from 'svelte/store';
 
 /**
  * @type {any[]}
@@ -13,22 +8,23 @@ const users = [
 let sessions = [];
 
 export const getUserByEmail = async (/** @type {string} */ email) => {
+	const users = get(user);
+	if(!users || !Array.isArray(users)) {
+		return Promise.resolve(null);
+	}
 	const existingUser = users.find((user) => user.email === email);
 	if (!existingUser) return Promise.resolve(null);
 	return Promise.resolve(existingUser);
 };
 
 export const getUserById = async (/** @type {string} */ id) => {
+	const users = get(user);
+	if(!users || !Array.isArray(users)) {
+	  return Promise.resolve(null);
+	}
 	const existingUser = users.find((user) => user.id === id);
-	if (!existingUser) return Promise.resolve(null);
+	if (!users) return Promise.resolve(null);
 	return Promise.resolve(existingUser);
-};
-
-export const registerUser = (/** @type {{ email: any; id?: string; password?: string; }} */ user) => {
-	const existingUser = users.find((u) => u.email === user.email);
-	if (existingUser) return Promise.reject(new Error('User already exists'));
-	users.push(user);
-	return Promise.resolve(user);
 };
 
 export const createSession = (email) => {
@@ -37,6 +33,7 @@ export const createSession = (email) => {
 		email,
 	};
 	sessions.push(session);
+	user.set(sessions);
 	return Promise.resolve(session);
 };
 
