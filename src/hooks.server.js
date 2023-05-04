@@ -1,4 +1,5 @@
 import { getUserById } from './store/db';
+import { user } from "./store/index"
 
 function redirect(location, body) {
 	return new Response(body, {
@@ -33,6 +34,5 @@ export const handle = async ({ event, resolve }) => {
 	if(Boolean(query) == true) {
 		await event.cookies.delete("session_id", { path: '/' });
 	}
-
 	return resolve(event);
 };

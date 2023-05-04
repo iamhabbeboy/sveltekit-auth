@@ -1,11 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import { create, find } from '.';
 
-/**
- * @type {any[]}
- */
-let sessions = [];
-
 export const getUserByEmail = async (/** @type {string} */ email) => {
 	const existingUser = find({
 		email: email
@@ -20,18 +15,15 @@ export const getUserById = async (/** @type {string} */ id) => {
 	return Promise.resolve(existingUser);
 };
 
-export const createSession = (/** @type {string} */ email) => {
+export const createSession = (/** @type {string} */ email, /** @type {string} */ password) => {
 	const session = {
 		id: uuidv4(),
-		email
+		email,
+		password
 	};
 	const response = create(session);
+	if(!response) {
+		return Promise.resolve(null);
+	}
 	return Promise.resolve(response);
-};
-
-export const removeSession = (id) => {
-	const session = sessions.find((session) => session.id === id);
-	if (!session) return Promise.reject(new Error('Session not found'));
-	sessions = sessions.filter((session) => session.id !== id);
-	return Promise.resolve(session);
 };

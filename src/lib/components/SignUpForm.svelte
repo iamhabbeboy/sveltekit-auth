@@ -2,31 +2,23 @@
 	import Input from '$lib/components/Input.svelte';
 	import Button from '$lib/components/Button.svelte';
 
-	import { createEventDispatcher } from 'svelte';
-
 	let email = '';
 	let password = '';
-	let confirmPassword = '';
-	let error;
 	/**
-	 * @type {{ focus: () => void; }}
+	 * @type {string}
 	 */
-	let confirmPasswordInputRef;
+	let confirmPassword = '';
+	/**
+	 * @type {string | null}
+	 */
+	let error;
 
-	const dispatch = createEventDispatcher();
-
-	function submit() {
-		error = null;
-		if (password !== confirmPassword) {
-			error = 'Passwords do not match.';
-			confirmPasswordInputRef.focus();
-			return;
-		}
-
-		dispatch('submit', {
-			email,
-			password,
-		});
+	/**
+	 * @param {string} password
+	 * @param {string} confirmPassword
+	 */
+	function validatePassword(password, confirmPassword) {
+		return confirmPassword !== password 
 	}
 </script>
 
@@ -39,11 +31,9 @@
 		name="confirm-password"
 		type="password"
 		bind:value={confirmPassword}
-
 	/>
-	<!-- bind:inputRef={confirmPasswordInputRef} -->
-	<!-- {#if error}
-		<p class="text-red-600 text-sm font-semibold">{error}</p>
-	{/if} -->
-	<Button type="submit">Sign Up</Button>
+	{#if confirmPassword !== "" && confirmPassword !== password}
+		<p class="text-red-600 text-sm font-semibold">Password not match</p>
+	{/if}
+	<Button type="submit" disabled="{validatePassword(password, confirmPassword)}">Sign Up</Button>
 </form>

@@ -1,7 +1,6 @@
 import { redirect } from '@sveltejs/kit';
 import { createSession } from '../../store/db';
 import { dev } from '$app/environment';
-import { user } from '../../store/index';
 
 export const actions = {
 	default: async ({ request, cookies }) => {
@@ -9,10 +8,10 @@ export const actions = {
 		const email = form.get('email');
 		const password = form.get('password');
 
-		if (typeof email !== 'string' || typeof password !== 'string') {
-			throw redirect(307, 'Enter a valid email and password');
+		if (email === '' || password === '') {
+			throw redirect(307, '/');
 		}
-		const { id } = await createSession(email);
+		const { id } = await createSession(email, password);
 		cookies.set('session_id', id, {
 			path: '/',
 			httpOnly: true,
