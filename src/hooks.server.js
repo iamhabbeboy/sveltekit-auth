@@ -1,23 +1,15 @@
+import { redirect } from '@sveltejs/kit';
 import { getUserById } from './store/db';
-import { user } from "./store/index"
 
-function redirect(location, body) {
-	return new Response(body, {
-		status: 303,
-		headers: { location }
-	});
-}
+const unProtectedRoutes = ['/', '/sign-in', '/sign-up'];
 
-const unProtectedRoutes = ['/', '/sign-up'];
-
-export const handle = async ({ event, resolve }) => {
+export const handle = async ({ event, request, resolve }) => {
 	const sessionId = event.cookies.get('session_id');
-	if (!sessionId && !unProtectedRoutes.includes(event.url.pathname))
-		return redirect('/', 'No authenticated user.');
-
+	if (!sessionId && !unProtectedRoutes.includes(event.url.pathname)) {
+		throw redirect(303, '/');
+	}
 	const userInfo = await getUserById(sessionId);
 	const currentUser = userInfo;
-
 	if (currentUser) {
 		event.locals.user = {
 			isAuthenticated: true,
@@ -26,13 +18,13 @@ export const handle = async ({ event, resolve }) => {
 		};
 	} else {
 		if (!unProtectedRoutes.includes(event.url.pathname)) {
-			return redirect('/', 'Not a valid user');
+			throw redirect(303, '/');
 		}
 	}
 
 	const query = event.url.searchParams.get('signout');
-	if(Boolean(query) == true) {
-		await event.cookies.delete("session_id", { path: '/' });
+	if (Boolean(query) == true) {
+		await event.cookies.delete('session_id', { path: '/' });
 	}
 	return resolve(event);
 };

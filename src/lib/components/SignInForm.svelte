@@ -1,20 +1,9 @@
 <script>
 	import Input from '$lib/components/Input.svelte';
 	import Button from '$lib/components/Button.svelte';
-
-	import { createEventDispatcher } from 'svelte';
-
 	let email = '';
 	let password = '';
 
-	const dispatch = createEventDispatcher();
-
-	function submit() {
-		dispatch('submit', {
-			email,
-			password,
-		});
-	}
 </script>
 
 <form method="POST" class="space-y-5 {$$props.class}">

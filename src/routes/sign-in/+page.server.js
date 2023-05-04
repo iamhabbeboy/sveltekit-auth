@@ -1,5 +1,5 @@
 import { fail, redirect } from '@sveltejs/kit';
-import { getUserByEmail } from '../store/db';
+import { getUserByEmail } from '../../store/db';
 import { dev } from '$app/environment';
 
 export const actions = {
@@ -9,7 +9,7 @@ export const actions = {
 		const password = form.get('password');
 
 		if (typeof email !== 'string' || typeof password !== 'string') {
-			throw redirect(307, 'Enter a valid email and password');
+			throw redirect(307, '/');
 		}
 		const user = await getUserByEmail(email);
         if(!user || user.password !== password) {
