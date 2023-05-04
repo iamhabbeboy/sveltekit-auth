@@ -8,7 +8,7 @@ export const actions = {
 		const email = form.get('email');
 		const password = form.get('password');
 
-		if (typeof email !== 'string' || typeof password !== 'string') {
+		if (email === '' || password === '') {
 			throw redirect(307, '/');
 		}
 		const user = await getUserByEmail(email);
